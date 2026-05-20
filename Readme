@@ -1,0 +1,12 @@
+MERN FLOW-----
+User clicks Login
+        ↓
+Frontend sends request
+        ↓
+Backend checks data
+        ↓
+MongoDB verifies user
+        ↓
+Backend sends response
+        ↓
+Frontend shows dashboard
