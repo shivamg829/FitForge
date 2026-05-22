@@ -5,7 +5,7 @@ require("dotenv").config();
 const authRoutes = require("./routes/authRoutes");
 const calorieRoutes = require('./routes/calorieRoutes.js');
 const workoutRoutes = require("./routes/workoutRoutes");
-
+const dietRoutes = require("./routes/dietRoutes");
 const app = express();
 
 // Middleware
@@ -15,6 +15,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/calories", calorieRoutes);
 app.use("/api/workouts", workoutRoutes);
+app.use("/api/diets", dietRoutes);
 
 app.get("/", (req, res) => {
   res.send("Welcome to FitForge API");
