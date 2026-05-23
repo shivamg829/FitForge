@@ -7,8 +7,9 @@ const calorieRoutes = require('./routes/calorieRoutes.js');
 const workoutRoutes = require("./routes/workoutRoutes");
 const dietRoutes = require("./routes/dietRoutes");
 const progressRoutes = require("./routes/progressRoutes");
-const app = express();
+const adminRoutes = require("./routes/adminRoutes");
 
+const app = express();
 app.use(cors());
 app.use(express.json());
 
@@ -17,7 +18,7 @@ app.use("/api/calories", calorieRoutes);
 app.use("/api/workouts", workoutRoutes);
 app.use("/api/diets", dietRoutes);
 app.use("/api/progress", progressRoutes);
-
+app.use("/api/admin", adminRoutes);
 app.get("/", (req, res) => {
   res.send("Welcome to FitForge API");
 });
