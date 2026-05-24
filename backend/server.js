@@ -8,7 +8,7 @@ const workoutRoutes = require("./routes/workoutRoutes");
 const dietRoutes = require("./routes/dietRoutes");
 const progressRoutes = require("./routes/progressRoutes");
 const adminRoutes = require("./routes/adminRoutes");
-
+const path = require("path");
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -19,6 +19,8 @@ app.use("/api/workouts", workoutRoutes);
 app.use("/api/diets", dietRoutes);
 app.use("/api/progress", progressRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 app.get("/", (req, res) => {
   res.send("Welcome to FitForge API");
 });
