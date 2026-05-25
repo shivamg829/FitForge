@@ -2,6 +2,15 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
 
+  const token = localStorage.getItem("token");
+
+  const logout = () => {
+
+    localStorage.removeItem("token");
+
+    window.location.reload();
+  };
+
   return (
 
     <nav className="bg-black text-white p-4 flex justify-between">
@@ -10,15 +19,30 @@ const Navbar = () => {
         FitForge 🔥
       </h1>
 
-      <div className="flex gap-4">
+      <div className="flex gap-4 items-center">
 
         <Link to="/">Home</Link>
 
-        <Link to="/login">Login</Link>
+        {!token ? (
+          <>
+            <Link to="/login">Login</Link>
 
-        <Link to="/register">Register</Link>
+            <Link to="/register">Register</Link>
+          </>
+        ) : (
+          <>
+            <Link to="/dashboard">
+              Dashboard
+            </Link>
 
-        <Link to="/dashboard">Dashboard</Link>
+            <button
+              onClick={logout}
+              className="bg-red-500 px-3 py-1 rounded"
+            >
+              Logout
+            </button>
+          </>
+        )}
 
       </div>
 
