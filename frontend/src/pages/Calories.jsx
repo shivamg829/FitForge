@@ -31,10 +31,11 @@ const Calories = () => {
     try {
       const res = await API.post("/calories", {
         food,
-        calories,
+        calories: Number(calories),
       });
 
       setEntries([res.data, ...entries]);
+
 
       setFood("");
       setCalories("");
