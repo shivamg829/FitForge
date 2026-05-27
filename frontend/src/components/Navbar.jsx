@@ -26,6 +26,7 @@ const Navbar = () => {
           <>
             <Link to="/dashboard">Dashboard</Link>
             <Link to="/calories">Calories</Link>
+            <Link to="/workout">Workout</Link>
             <button onClick={logout} className="bg-red-500 px-3 py-1 rounded">
               Logout
             </button>
