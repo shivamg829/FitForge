@@ -11,7 +11,7 @@ const Navbar = () => {
 
   return (
     <nav className="bg-black text-white p-4 flex justify-between">
-      <h1 className="text-2xl font-bold">FitForge 🔥</h1>
+      <h1 className="text-2xl font-bold">FitForge </h1>
 
       <div className="flex gap-4 items-center">
         <Link to="/">Home</Link>
