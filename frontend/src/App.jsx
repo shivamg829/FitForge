@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import Calories from "./pages/Calories";
 import Workout from "./pages/Workout";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import Diet from "./pages/Diet";
 
 function App() {
   return (
@@ -43,6 +44,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Workout />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/diet"
+          element={
+            <ProtectedRoute>
+              <Diet />
             </ProtectedRoute>
           }
         />
