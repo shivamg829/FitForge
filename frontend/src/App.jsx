@@ -10,7 +10,8 @@ import Calories from "./pages/Calories";
 import Workout from "./pages/Workout";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Diet from "./pages/Diet";
-
+import Progress from "./pages/Progress";
+import Profile from "./pages/Profile";
 function App() {
   return (
     <BrowserRouter>
@@ -52,6 +53,22 @@ function App() {
           element={
             <ProtectedRoute>
               <Diet />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/progress"
+          element={
+            <ProtectedRoute>
+              <Progress />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
             </ProtectedRoute>
           }
         />

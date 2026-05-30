@@ -84,63 +84,78 @@ const loginUser = async (req, res) => {
 };
 // GET USER PROFILE
 const getUserProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select("-password");
 
-    try {
-
-        const user = await User.findById(req.user._id).select("-password");
-
-        res.status(200).json(user);
-
-    } catch(error){
-
-        res.status(500).json({
-            message: error.message
-        });
-    }
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
 };
 const uploadProfileImage = async (req, res) => {
-
-    try {
-
-        if(!req.file){
-
-            return res.status(400).json({
-                message: "No image uploaded"
-            });
-        }
-
-        const user = await User.findById(req.user._id);
-
-        if(!user){
-
-            return res.status(404).json({
-                message: "User not found"
-            });
-        }
-
-        user.profileImage = `/uploads/${req.file.filename}`;
-
-        await user.save();
-
-        res.status(200).json({
-
-            message: "Profile image uploaded successfully",
-
-            profileImage: user.profileImage
-        });
-
-    } catch(error){
-
-        console.log(error);
-
-        res.status(500).json({
-            message: error.message
-        });
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        message: "No image uploaded",
+      });
     }
+
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    user.profileImage = `/uploads/${req.file.filename}`;
+
+    await user.save();
+
+    res.status(200).json({
+      message: "Profile image uploaded successfully",
+
+      profileImage: user.profileImage,
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+const updateProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    user.name = req.body.name || user.name;
+    user.weight = req.body.weight || user.weight;
+    user.height = req.body.height || user.height;
+    user.goal = req.body.goal || user.goal;
+    user.fitnessLevel = req.body.fitnessLevel || user.fitnessLevel;
+
+    await user.save();
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
 };
 module.exports = {
   registerUser,
   loginUser,
   getUserProfile,
-  uploadProfileImage
+  uploadProfileImage,
+  updateProfile,
 };
