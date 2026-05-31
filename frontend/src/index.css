@@ -1,1 +1,30 @@
 @import "tailwindcss";
+
+:root {
+  --app-bg: #f3f4f6; /* gray-100 */
+  --card-bg: #ffffff;
+  --text: #111827; /* gray-900 */
+  --muted: #6b7280; /* gray-500 */
+
+  --radius-xl: 1rem; /* 16px */
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--app-bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Consistent focus rings across inputs/buttons */
+:where(input, select, textarea, button, a):focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.35); /* blue-500/35 */
+  border-color: rgba(59, 130, 246, 1) !important;
+}
+

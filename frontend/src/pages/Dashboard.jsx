@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import API from "../services/api";
 
 const Dashboard = () => {
@@ -126,33 +127,33 @@ const Dashboard = () => {
         <h2 className="text-2xl font-bold mb-6">Quick Actions 🚀</h2>
 
         <div className="flex flex-wrap gap-4">
-          <a
-            href="/calories"
-            className="bg-blue-500 text-white px-5 py-3 rounded-lg"
+          <Link
+            to="/calories"
+            className="bg-blue-500 hover:bg-blue-600 transition text-white px-5 py-3 rounded-lg font-medium"
           >
             Calories Tracker
-          </a>
+          </Link>
 
-          <a
-            href="/workout"
-            className="bg-green-500 text-white px-5 py-3 rounded-lg"
+          <Link
+            to="/workout"
+            className="bg-green-500 hover:bg-green-600 transition text-white px-5 py-3 rounded-lg font-medium"
           >
             Workout Plan
-          </a>
+          </Link>
 
-          <a
-            href="/diet"
-            className="bg-purple-500 text-white px-5 py-3 rounded-lg"
+          <Link
+            to="/diet"
+            className="bg-purple-500 hover:bg-purple-600 transition text-white px-5 py-3 rounded-lg font-medium"
           >
             Diet Planner
-          </a>
+          </Link>
 
-          <a
-            href="/progress"
-            className="bg-orange-500 text-white px-5 py-3 rounded-lg"
+          <Link
+            to="/progress"
+            className="bg-orange-500 hover:bg-orange-600 transition text-white px-5 py-3 rounded-lg font-medium"
           >
             Progress Tracker
-          </a>
+          </Link>
         </div>
       </div>
     </div>
