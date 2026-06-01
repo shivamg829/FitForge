@@ -30,20 +30,15 @@ const Dashboard = () => {
       : "N/A";
 
   let bmiStatus = "";
-
   if (bmi !== "N/A") {
-    if (bmi < 18.5) {
-      bmiStatus = "Underweight";
-    } else if (bmi < 25) {
-      bmiStatus = "Normal";
-    } else {
-      bmiStatus = "Overweight";
-    }
+    if (bmi < 18.5) bmiStatus = "Underweight";
+    else if (bmi < 25) bmiStatus = "Normal";
+    else bmiStatus = "Overweight";
   }
 
   return (
     <div className="min-h-screen bg-gray-100 p-10">
-      <h1 className="text-4xl font-bold mb-8">Dashboard 📊</h1>
+      <h1 className="text-4xl font-bold mb-8">Dashboard</h1>
 
       {user && (
         <div className="bg-white rounded-2xl shadow-lg p-8 mb-10">
@@ -59,72 +54,54 @@ const Dashboard = () => {
             />
 
             <div>
-              <h2 className="text-3xl font-bold">Welcome, {user.name} 👋</h2>
-
+              <h2 className="text-3xl font-bold">Welcome, {user.name}</h2>
               <p className="text-gray-600 mt-2">{user.email}</p>
-
-              <p className="mt-2">🎯 Goal: {user.goal || "Not Set"}</p>
-
-              <p>💪 Level: {user.fitnessLevel || "Not Set"}</p>
+              <p className="mt-2">Goal: {user.goal || "Not Set"}</p>
+              <p>Level: {user.fitnessLevel || "Not Set"}</p>
             </div>
           </div>
         </div>
       )}
 
-      {/* STATISTICS */}
-
       <div className="grid md:grid-cols-4 gap-6">
         <div className="bg-white shadow-lg rounded-xl p-6">
           <h2 className="text-lg font-semibold">Total Calories</h2>
-
           <p className="text-3xl font-bold mt-3">{totalCalories}</p>
         </div>
 
         <div className="bg-white shadow-lg rounded-xl p-6">
           <h2 className="text-lg font-semibold">Food Entries</h2>
-
           <p className="text-3xl font-bold mt-3">{calories.length}</p>
         </div>
 
         <div className="bg-white shadow-lg rounded-xl p-6">
           <h2 className="text-lg font-semibold">Weight</h2>
-
           <p className="text-3xl font-bold mt-3">{user?.weight || "N/A"} kg</p>
         </div>
 
         <div className="bg-white shadow-lg rounded-xl p-6">
           <h2 className="text-lg font-semibold">Height</h2>
-
           <p className="text-3xl font-bold mt-3">{user?.height || "N/A"} cm</p>
         </div>
       </div>
 
-      {/* BMI SECTION */}
-
       <div className="grid md:grid-cols-2 gap-6 mt-8">
         <div className="bg-white shadow-lg rounded-xl p-6">
-          <h2 className="text-xl font-semibold mb-4">BMI Analysis ⚖️</h2>
-
+          <h2 className="text-xl font-semibold mb-4">BMI Analysis</h2>
           <p className="text-4xl font-bold">{bmi}</p>
-
           <p className="text-gray-600 mt-2">{bmiStatus}</p>
         </div>
 
         <div className="bg-white shadow-lg rounded-xl p-6">
-          <h2 className="text-xl font-semibold mb-4">Fitness Summary 🏆</h2>
-
+          <h2 className="text-xl font-semibold mb-4">Fitness Summary</h2>
           <p>Goal: {user?.goal || "Not Set"}</p>
-
           <p>Level: {user?.fitnessLevel || "Not Set"}</p>
-
           <p>Calories Logged: {totalCalories}</p>
         </div>
       </div>
 
-      {/* QUICK ACTIONS */}
-
       <div className="bg-white shadow-lg rounded-xl p-6 mt-8">
-        <h2 className="text-2xl font-bold mb-6">Quick Actions 🚀</h2>
+        <h2 className="text-2xl font-bold mb-6">Quick Actions</h2>
 
         <div className="flex flex-wrap gap-4">
           <Link
@@ -161,3 +138,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+

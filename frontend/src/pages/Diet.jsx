@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const dietPlans = {
   muscleGain: {
-    title: "Muscle Gain Diet 💪",
+    title: "Muscle Gain Diet" ,
 
     meals: [
       {
@@ -32,7 +32,7 @@ const dietPlans = {
   },
 
   weightLoss: {
-    title: "Weight Loss Diet 🔥",
+    title: "Weight Loss Diet" ,
 
     meals: [
       {
@@ -103,7 +103,7 @@ const Diet = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-10">
-      <h1 className="text-5xl font-bold text-center mb-10">Diet Planner 🥗</h1>
+      <h1 className="text-5xl font-bold text-center mb-10">Diet Planner</h1>
 
       {/* GOAL SELECTOR */}
 
@@ -160,11 +160,11 @@ const Diet = () => {
             <p className="mt-4 text-gray-700">{meal.food}</p>
 
             <div className="mt-5 space-y-2">
-              <p>💪 Protein: {meal.protein}g</p>
+              <p>Protein: {meal.protein}g</p>
 
-              <p>🍚 Carbs: {meal.carbs}g</p>
+              <p>Carbs: {meal.carbs}g</p>
 
-              <p>🥑 Fats: {meal.fats}g</p>
+              <p>Fats: {meal.fats}g</p>
             </div>
           </div>
         ))}
@@ -173,7 +173,7 @@ const Diet = () => {
       {/* WATER TRACKER */}
 
       <div className="bg-white rounded-2xl shadow-lg p-8 mb-12">
-        <h2 className="text-3xl font-bold mb-6">Water Intake 💧</h2>
+        <h2 className="text-3xl font-bold mb-6">Water Intake</h2>
 
         <p className="text-xl mb-5">{water} Glasses</p>
 
@@ -197,7 +197,7 @@ const Diet = () => {
       {/* BMI CALCULATOR */}
 
       <div className="bg-white rounded-2xl shadow-lg p-8">
-        <h2 className="text-3xl font-bold mb-6">BMI Calculator ⚖️</h2>
+      <h2 className="text-3xl font-bold mb-6">BMI Calculator</h2>
 
         <div className="flex flex-col md:flex-row gap-5">
           <input

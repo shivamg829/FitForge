@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const workoutPlans = {
   muscleGain: {
-    title: "Muscle Gain Plan 💪",
+    title: "Muscle Gain Plan" ,
 
     split: [
       {
@@ -63,7 +63,7 @@ const workoutPlans = {
   },
 
   weightLoss: {
-    title: "Weight Loss Plan 🔥",
+    title: "Weight Loss Plan" ,
 
     split: [
       {
@@ -126,9 +126,7 @@ const Workout = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-10">
-      <h1 className="text-5xl font-bold mb-10 text-center">
-        Workout Planner 🏋️
-      </h1>
+        <h1 className="text-5xl font-bold mb-10 text-center">\n        Workout Planner\n      </h1>
 
       {/* SELECTOR */}
 
