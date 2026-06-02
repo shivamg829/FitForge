@@ -32,11 +32,6 @@ const Home = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-20 relative">
           <div className="grid lg:grid-cols-12 gap-10 items-center">
             <div className="lg:col-span-7">
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/70 border border-black/5 px-3 py-1 text-sm">
-                <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
-                <span className="text-gray-700">Track calories, workouts & progress in one place</span>
-              </div>
-
               <h1 className="mt-5 text-4xl sm:text-5xl font-extrabold leading-tight text-gray-900">
                 Build healthier habits with <span className="text-blue-600">FitForge</span>
               </h1>
@@ -160,36 +155,25 @@ const Home = () => {
             {[{
               title: "Calories Tracker",
               desc: "Log meals and see your total quickly.",
-              badge: "🍎",
               to: "/calories",
-              color: "bg-red-50 border-red-200",
             },{
               title: "Workout Plans",
               desc: "Follow a structured plan for your goal.",
-              badge: "🏋️",
               to: "/workout",
-              color: "bg-green-50 border-green-200",
             },{
               title: "Progress Insights",
               desc: "Track changes and stay on target.",
-              badge: "📈",
               to: "/progress",
-              color: "bg-orange-50 border-orange-200",
             },{
               title: "Diet Planner",
               desc: "Plan your meals with a simple workflow.",
-              badge: "🥗",
               to: "/diet",
-              color: "bg-purple-50 border-purple-200",
             }].map((f) => (
               <Link
                 key={f.title}
                 to={f.to}
                 className="group bg-white rounded-3xl border border-black/5 p-6 shadow-sm hover:shadow-md transition"
               >
-                <div className={`inline-flex items-center justify-center w-12 h-12 rounded-2xl border ${f.color}`}>
-                  <span className="text-2xl">{f.badge}</span>
-                </div>
                 <h3 className="mt-4 text-xl font-bold text-gray-900 group-hover:text-blue-600 transition">
                   {f.title}
                 </h3>
@@ -228,7 +212,6 @@ const Home = () => {
               <div key={s.step} className="bg-white rounded-3xl border border-black/5 p-6 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div className="text-5xl font-extrabold text-blue-600/20">{s.step}</div>
-                  <div className="w-12 h-12 rounded-2xl bg-blue-600/10 flex items-center justify-center">✨</div>
                 </div>
                 <h3 className="mt-2 text-xl font-bold text-gray-900">{s.title}</h3>
                 <p className="mt-2 text-gray-700">{s.desc}</p>
