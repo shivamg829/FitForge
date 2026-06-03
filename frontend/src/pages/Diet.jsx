@@ -1,224 +1,287 @@
-import { useState } from "react";
-
-const dietPlans = {
-  muscleGain: {
-    title: "Muscle Gain Diet" ,
-
-    meals: [
-      {
-        meal: "Breakfast",
-        food: "Oats + Banana + Peanut Butter + Milk",
-        protein: 25,
-        carbs: 60,
-        fats: 15,
-      },
-
-      {
-        meal: "Lunch",
-        food: "Chicken Breast + Rice + Vegetables",
-        protein: 40,
-        carbs: 70,
-        fats: 10,
-      },
-
-      {
-        meal: "Dinner",
-        food: "Eggs + Sweet Potato + Salad",
-        protein: 35,
-        carbs: 45,
-        fats: 12,
-      },
-    ],
-  },
-
-  weightLoss: {
-    title: "Weight Loss Diet" ,
-
-    meals: [
-      {
-        meal: "Breakfast",
-        food: "Oats + Apple + Green Tea",
-        protein: 15,
-        carbs: 35,
-        fats: 5,
-      },
-
-      {
-        meal: "Lunch",
-        food: "Grilled Chicken + Salad",
-        protein: 35,
-        carbs: 20,
-        fats: 8,
-      },
-
-      {
-        meal: "Dinner",
-        food: "Soup + Boiled Eggs",
-        protein: 25,
-        carbs: 15,
-        fats: 6,
-      },
-    ],
-  },
-};
+import { useEffect, useState } from "react";
+import API from "../services/api";
+import {
+  Utensils,
+  Target,
+  Weight,
+  Flame,
+  Beef,
+  Wheat,
+  Droplets,
+  Trash2,
+  Plus,
+  Calendar,
+  ClipboardList,
+} from "lucide-react";
 
 const Diet = () => {
-  const [goal, setGoal] = useState("muscleGain");
-
-  const [water, setWater] = useState(0);
-
-  const [height, setHeight] = useState("");
-
+  const [goal, setGoal] = useState("Muscle Gain");
   const [weight, setWeight] = useState("");
+  const [diets, setDiets] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const currentPlan = dietPlans[goal];
-
-  // BMI CALCULATION
-
-  const calculateBMI = () => {
-    if (!height || !weight) {
-      return 0;
+  const fetchDiets = async () => {
+    try {
+      const res = await API.get("/diet");
+      setDiets(res.data);
+    } catch (error) {
+      console.log(error);
     }
-
-    const heightInMeters = height / 100;
-
-    return (weight / (heightInMeters * heightInMeters)).toFixed(1);
   };
 
-  const bmi = calculateBMI();
+  useEffect(() => {
+    fetchDiets();
+  }, []);
 
-  // TOTAL MACROS
+  const generateDiet = async () => {
+    if (!weight) {
+      return alert("Please enter your weight");
+    }
 
-  const totalProtein = currentPlan.meals.reduce(
-    (acc, item) => acc + item.protein,
-    0,
-  );
+    try {
+      setLoading(true);
 
-  const totalCarbs = currentPlan.meals.reduce(
-    (acc, item) => acc + item.carbs,
-    0,
-  );
+      await API.post("/diet", {
+        goal,
+        weight,
+      });
 
-  const totalFats = currentPlan.meals.reduce((acc, item) => acc + item.fats, 0);
+      setWeight("");
+      fetchDiets();
+    } catch (error) {
+      console.log(error);
+      alert("Failed to generate diet plan");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteDiet = async (id) => {
+    try {
+      await API.delete(`/diet/${id}`);
+
+      setDiets((prev) => prev.filter((diet) => diet._id !== id));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const latestDiet = diets.length > 0 ? diets[0] : null;
 
   return (
-    <div className="min-h-screen bg-gray-100 p-10">
-      <h1 className="text-5xl font-bold text-center mb-10">Diet Planner</h1>
+    <div
+      className="min-h-screen relative"
+      style={{
+        backgroundImage:
+          "url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1800&q=80')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+      }}
+    >
+      <div className="absolute inset-0 bg-black/85" />
 
-      {/* GOAL SELECTOR */}
+      <div className="relative z-10 p-6 md:p-10 text-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="rounded-3xl border border-lime-500/20 bg-linear-to-r from-lime-500/20 to-transparent backdrop-blur-xl p-8 md:p-10 mb-8">
+            <h1 className="text-5xl font-extrabold text-lime-400">
+              Diet Planner
+            </h1>
 
-      <div className="flex justify-center mb-10">
-        <select
-          value={goal}
-          onChange={(e) => setGoal(e.target.value)}
-          className="border p-3 rounded-lg shadow-md"
-        >
-          <option value="muscleGain">Muscle Gain</option>
+            <p className="mt-4 text-zinc-300 text-lg">
+              Generate personalized nutrition plans based on your fitness goal.
+            </p>
+          </div>
 
-          <option value="weightLoss">Weight Loss</option>
-        </select>
-      </div>
+          <div className="bg-zinc-900/80 backdrop-blur-xl border border-zinc-800 rounded-3xl p-8 mb-8">
+            <div className="flex items-center gap-3 mb-6">
+              <Target className="text-lime-400" />
+              <h2 className="text-2xl font-bold">Generate Diet Plan</h2>
+            </div>
 
-      {/* TITLE */}
+            <div className="grid md:grid-cols-3 gap-5">
+              <div>
+                <label className="block text-zinc-400 mb-2">Fitness Goal</label>
 
-      <h2 className="text-3xl font-semibold text-center mb-10">
-        {currentPlan.title}
-      </h2>
+                <select
+                  value={goal}
+                  onChange={(e) => setGoal(e.target.value)}
+                  className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 focus:border-lime-400 focus:outline-none"
+                >
+                  <option>Muscle Gain</option>
+                  <option>Fat Loss</option>
+                  <option>Maintenance</option>
+                </select>
+              </div>
 
-      {/* MACROS */}
+              <div>
+                <label className="block text-zinc-400 mb-2">Weight (kg)</label>
 
-      <div className="grid md:grid-cols-3 gap-6 mb-10">
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-xl font-semibold">Protein</h2>
+                <input
+                  type="number"
+                  placeholder="Enter Weight"
+                  value={weight}
+                  onChange={(e) => setWeight(e.target.value)}
+                  className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-3 focus:border-lime-400 focus:outline-none"
+                />
+              </div>
 
-          <p className="text-3xl font-bold mt-3">{totalProtein}g</p>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-xl font-semibold">Carbs</h2>
-
-          <p className="text-3xl font-bold mt-3">{totalCarbs}g</p>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-xl font-semibold">Fats</h2>
-
-          <p className="text-3xl font-bold mt-3">{totalFats}g</p>
-        </div>
-      </div>
-
-      {/* MEAL CARDS */}
-
-      <div className="grid md:grid-cols-3 gap-8 mb-12">
-        {currentPlan.meals.map((meal, index) => (
-          <div
-            key={index}
-            className="bg-white rounded-2xl shadow-lg p-6 hover:scale-105 transition duration-300"
-          >
-            <h2 className="text-2xl font-bold">{meal.meal}</h2>
-
-            <p className="mt-4 text-gray-700">{meal.food}</p>
-
-            <div className="mt-5 space-y-2">
-              <p>Protein: {meal.protein}g</p>
-
-              <p>Carbs: {meal.carbs}g</p>
-
-              <p>Fats: {meal.fats}g</p>
+              <div className="flex items-end">
+                <button
+                  onClick={generateDiet}
+                  disabled={loading}
+                  className="w-full bg-lime-400 text-black font-bold p-3 rounded-xl hover:bg-lime-300 transition disabled:opacity-60"
+                >
+                  {loading ? (
+                    "Generating..."
+                  ) : (
+                    <span className="flex items-center justify-center gap-2">
+                      <Plus size={18} />
+                      Generate Plan
+                    </span>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
-        ))}
-      </div>
 
-      {/* WATER TRACKER */}
+          {latestDiet && (
+            <>
+              <div className="mb-8">
+                <h2 className="text-3xl font-bold mb-6 text-lime-400">
+                  Latest Diet Plan
+                </h2>
 
-      <div className="bg-white rounded-2xl shadow-lg p-8 mb-12">
-        <h2 className="text-3xl font-bold mb-6">Water Intake</h2>
+                <div className="grid md:grid-cols-4 gap-6">
+                  <div className="bg-zinc-900/80 backdrop-blur-xl border border-zinc-800 rounded-2xl p-6">
+                    <Flame className="text-lime-400 mb-4" />
+                    <h3 className="text-zinc-400">Calories</h3>
+                    <p className="text-4xl font-bold mt-2">
+                      {latestDiet.calories}
+                    </p>
+                  </div>
 
-        <p className="text-xl mb-5">{water} Glasses</p>
+                  <div className="bg-zinc-900/80 backdrop-blur-xl border border-zinc-800 rounded-2xl p-6">
+                    <Beef className="text-lime-400 mb-4" />
+                    <h3 className="text-zinc-400">Protein</h3>
+                    <p className="text-4xl font-bold mt-2">
+                      {latestDiet.protein}g
+                    </p>
+                  </div>
 
-        <div className="flex gap-4">
-          <button
-            onClick={() => setWater(water + 1)}
-            className="bg-blue-500 text-white px-5 py-2 rounded-lg"
-          >
-            Add Water
-          </button>
+                  <div className="bg-zinc-900/80 backdrop-blur-xl border border-zinc-800 rounded-2xl p-6">
+                    <Wheat className="text-lime-400 mb-4" />
+                    <h3 className="text-zinc-400">Carbs</h3>
+                    <p className="text-4xl font-bold mt-2">
+                      {latestDiet.carbs}g
+                    </p>
+                  </div>
 
-          <button
-            onClick={() => setWater(0)}
-            className="bg-red-500 text-white px-5 py-2 rounded-lg"
-          >
-            Reset
-          </button>
-        </div>
-      </div>
+                  <div className="bg-zinc-900/80 backdrop-blur-xl border border-zinc-800 rounded-2xl p-6">
+                    <Droplets className="text-lime-400 mb-4" />
+                    <h3 className="text-zinc-400">Fats</h3>
+                    <p className="text-4xl font-bold mt-2">
+                      {latestDiet.fats}g
+                    </p>
+                  </div>
+                </div>
+              </div>
 
-      {/* BMI CALCULATOR */}
+              <div className="bg-zinc-900/80 backdrop-blur-xl border border-zinc-800 rounded-3xl p-8 mb-8">
+                <div className="flex items-center gap-3 mb-6">
+                  <ClipboardList className="text-lime-400" />
+                  <h2 className="text-2xl font-bold">Meal Plan</h2>
+                </div>
 
-      <div className="bg-white rounded-2xl shadow-lg p-8">
-      <h2 className="text-3xl font-bold mb-6">BMI Calculator</h2>
+                <div className="grid md:grid-cols-2 gap-5">
+                  {latestDiet.mealPlan.map((meal, index) => (
+                    <div
+                      key={index}
+                      className="bg-zinc-800/70 border border-zinc-700 rounded-2xl p-5"
+                    >
+                      <h3 className="text-lime-400 font-semibold mb-2">
+                        Meal {index + 1}
+                      </h3>
 
-        <div className="flex flex-col md:flex-row gap-5">
-          <input
-            type="number"
-            placeholder="Height (cm)"
-            value={height}
-            onChange={(e) => setHeight(e.target.value)}
-            className="border p-3 rounded-lg"
-          />
+                      <p className="text-zinc-300">{meal}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
 
-          <input
-            type="number"
-            placeholder="Weight (kg)"
-            value={weight}
-            onChange={(e) => setWeight(e.target.value)}
-            className="border p-3 rounded-lg"
-          />
-        </div>
+          <div className="bg-zinc-900/80 backdrop-blur-xl border border-zinc-800 rounded-3xl p-8">
+            <div className="flex items-center gap-3 mb-6">
+              <Calendar className="text-lime-400" />
+              <h2 className="text-2xl font-bold">Diet History</h2>
+            </div>
 
-        <div className="mt-6">
-          <h3 className="text-2xl font-semibold">Your BMI: {bmi}</h3>
+            {diets.length === 0 ? (
+              <div className="text-center py-12">
+                <Utensils size={60} className="mx-auto text-zinc-600 mb-4" />
+
+                <h3 className="text-2xl font-bold mb-2">No Diet Plans Yet</h3>
+
+                <p className="text-zinc-400">
+                  Generate your first personalized diet plan.
+                </p>
+              </div>
+            ) : (
+              <div className="grid lg:grid-cols-2 gap-6">
+                {diets.map((diet) => (
+                  <div
+                    key={diet._id}
+                    className="bg-zinc-800/70 border border-zinc-700 rounded-2xl p-6 hover:border-lime-400 transition"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h3 className="text-2xl font-bold text-lime-400">
+                          {diet.goal}
+                        </h3>
+
+                        <div className="mt-3 space-y-2 text-zinc-300">
+                          <p className="flex items-center gap-2">
+                            <Weight size={16} />
+                            {diet.weight} kg
+                          </p>
+
+                          <p>Calories: {diet.calories}</p>
+
+                          <p>Protein: {diet.protein}g</p>
+
+                          <p>Carbs: {diet.carbs}g</p>
+
+                          <p>Fats: {diet.fats}g</p>
+                        </div>
+
+                        <p className="text-zinc-500 text-sm mt-4">
+                          {new Date(diet.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+
+                      <button
+                        onClick={() => deleteDiet(diet._id)}
+                        className="bg-red-500/20 hover:bg-red-500 text-red-400 hover:text-white p-3 rounded-xl transition"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
+
+                    <div className="mt-5 border-t border-zinc-700 pt-4">
+                      <h4 className="font-semibold mb-3">Meals</h4>
+
+                      <ul className="space-y-2 text-zinc-400">
+                        {diet.mealPlan.map((meal, index) => (
+                          <li key={index}>• {meal}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

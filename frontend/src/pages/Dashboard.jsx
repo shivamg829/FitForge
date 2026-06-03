@@ -1,6 +1,16 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import API from "../services/api";
+import {
+  Flame,
+  Utensils,
+  Scale,
+  Ruler,
+  Target,
+  Activity,
+  TrendingUp,
+  Dumbbell,
+} from "lucide-react";
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -15,7 +25,7 @@ const Dashboard = () => {
         const caloriesRes = await API.get("/calories");
         setCalories(caloriesRes.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
 
@@ -29,108 +39,212 @@ const Dashboard = () => {
       ? (user.weight / Math.pow(user.height / 100, 2)).toFixed(1)
       : "N/A";
 
-  let bmiStatus = "";
+  let bmiStatus = "Not Available";
+
   if (bmi !== "N/A") {
     if (bmi < 18.5) bmiStatus = "Underweight";
-    else if (bmi < 25) bmiStatus = "Normal";
-    else bmiStatus = "Overweight";
+    else if (bmi < 25) bmiStatus = "Healthy";
+    else if (bmi < 30) bmiStatus = "Overweight";
+    else bmiStatus = "Obese";
   }
 
+  const getBmiColor = () => {
+    if (bmi === "N/A") return "bg-zinc-700";
+    if (bmi < 18.5) return "bg-yellow-500";
+    if (bmi < 25) return "bg-lime-500";
+    if (bmi < 30) return "bg-orange-500";
+    return "bg-red-500";
+  };
+
+  const stats = [
+    {
+      title: "Total Calories",
+      value: totalCalories,
+      icon: Flame,
+    },
+    {
+      title: "Food Entries",
+      value: calories.length,
+      icon: Utensils,
+    },
+    {
+      title: "Weight",
+      value: `${user?.weight || "N/A"} kg`,
+      icon: Scale,
+    },
+    {
+      title: "Height",
+      value: `${user?.height || "N/A"} cm`,
+      icon: Ruler,
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-100 p-10">
-      <h1 className="text-4xl font-bold mb-8">Dashboard</h1>
+    <div
+      className="min-h-screen relative"
+      style={{
+        backgroundImage:
+          "url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1600&q=80')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+      }}
+    >
+      <div className="absolute inset-0 bg-black/85" />
 
-      {user && (
-        <div className="bg-white rounded-2xl shadow-lg p-8 mb-10">
-          <div className="flex flex-col md:flex-row items-center gap-6">
-            <img
-              src={
-                user.profileImage
-                  ? `http://localhost:8000${user.profileImage}`
-                  : "https://via.placeholder.com/150"
-              }
-              alt="profile"
-              className="w-28 h-28 rounded-full object-cover border-4 border-blue-500"
-            />
+      <div className="relative z-10 p-6 md:p-10 text-white">
+        <div className="mb-8 rounded-3xl border border-lime-500/20 bg-black/40 backdrop-blur-md p-8">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-lime-400">
+            Welcome Back, {user?.name || "Athlete"}
+          </h1>
 
-            <div>
-              <h2 className="text-3xl font-bold">Welcome, {user.name}</h2>
-              <p className="text-gray-600 mt-2">{user.email}</p>
-              <p className="mt-2">Goal: {user.goal || "Not Set"}</p>
-              <p>Level: {user.fitnessLevel || "Not Set"}</p>
+          <p className="mt-3 text-zinc-300 text-lg">
+            Track your progress, stay consistent, and reach your fitness goals.
+          </p>
+        </div>
+
+        {user && (
+          <div className="mb-8 rounded-3xl border border-zinc-800 bg-zinc-900/80 backdrop-blur-md p-8">
+            <div className="flex flex-col md:flex-row items-center gap-8">
+              {user.profileImage ? (
+                <img
+                  src={`http://localhost:8000${user.profileImage}`}
+                  alt="Profile"
+                  className="w-32 h-32 rounded-full object-cover border-4 border-lime-400"
+                />
+              ) : (
+                <div className="w-32 h-32 rounded-full bg-lime-400 text-black flex items-center justify-center text-5xl font-extrabold border-4 border-lime-300">
+                  {user?.name?.charAt(0)?.toUpperCase() || "U"}
+                </div>
+              )}
+
+              <div className="flex-1">
+                <h2 className="text-3xl font-bold text-lime-400">
+                  {user.name}
+                </h2>
+
+                <p className="mt-2 text-zinc-400">{user.email}</p>
+
+                <div className="flex flex-wrap gap-3 mt-5">
+                  <div className="flex items-center gap-2 bg-zinc-800 px-4 py-2 rounded-full">
+                    <Target size={16} />
+                    <span>Goal: {user.goal || "Not Set"}</span>
+                  </div>
+
+                  <div className="flex items-center gap-2 bg-zinc-800 px-4 py-2 rounded-full">
+                    <Activity size={16} />
+                    <span>Fitness Level: {user.fitnessLevel || "Not Set"}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="grid gap-6 md:grid-cols-4">
+          {stats.map((stat) => {
+            const Icon = stat.icon;
+
+            return (
+              <div
+                key={stat.title}
+                className="bg-zinc-900/80 backdrop-blur-md border border-zinc-800 rounded-2xl p-6 hover:border-lime-400 transition-all"
+              >
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-800">
+                  <Icon size={22} className="text-lime-400" />
+                </div>
+
+                <p className="text-sm text-zinc-400">{stat.title}</p>
+
+                <h3 className="mt-2 text-3xl font-bold">{stat.value}</h3>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2 mt-8">
+          <div className="bg-zinc-900/80 backdrop-blur-md border border-zinc-800 rounded-3xl p-8">
+            <h2 className="text-2xl font-bold text-lime-400 mb-5">
+              BMI Analysis
+            </h2>
+
+            <div className="text-6xl font-extrabold">{bmi}</div>
+
+            <span
+              className={`inline-block mt-5 px-4 py-2 rounded-full text-sm font-semibold text-black ${getBmiColor()}`}
+            >
+              {bmiStatus}
+            </span>
+          </div>
+
+          <div className="bg-zinc-900/80 backdrop-blur-md border border-zinc-800 rounded-3xl p-8">
+            <h2 className="flex items-center gap-2 text-2xl font-bold text-lime-400 mb-5">
+              <TrendingUp size={24} />
+              Fitness Summary
+            </h2>
+
+            <div className="space-y-4 text-zinc-300">
+              <div className="flex justify-between border-b border-zinc-800 pb-3">
+                <span>Goal</span>
+                <span>{user?.goal || "Not Set"}</span>
+              </div>
+
+              <div className="flex justify-between border-b border-zinc-800 pb-3">
+                <span>Fitness Level</span>
+                <span>{user?.fitnessLevel || "Not Set"}</span>
+              </div>
+
+              <div className="flex justify-between border-b border-zinc-800 pb-3">
+                <span>Total Calories</span>
+                <span>{totalCalories}</span>
+              </div>
+
+              <div className="flex justify-between">
+                <span>Food Entries</span>
+                <span>{calories.length}</span>
+              </div>
             </div>
           </div>
         </div>
-      )}
 
-      <div className="grid md:grid-cols-4 gap-6">
-        <div className="bg-white shadow-lg rounded-xl p-6">
-          <h2 className="text-lg font-semibold">Total Calories</h2>
-          <p className="text-3xl font-bold mt-3">{totalCalories}</p>
-        </div>
+        <div className="mt-8 bg-zinc-900/80 backdrop-blur-md border border-zinc-800 rounded-3xl p-8">
+          <h2 className="text-2xl font-bold text-lime-400 mb-6">
+            Quick Actions
+          </h2>
 
-        <div className="bg-white shadow-lg rounded-xl p-6">
-          <h2 className="text-lg font-semibold">Food Entries</h2>
-          <p className="text-3xl font-bold mt-3">{calories.length}</p>
-        </div>
+          <div className="grid gap-4 md:grid-cols-4">
+            <Link
+              to="/calories"
+              className="flex items-center justify-center gap-2 bg-lime-400 hover:bg-lime-300 text-black font-bold py-4 rounded-xl transition"
+            >
+              <Flame size={18} />
+              Calories Tracker
+            </Link>
 
-        <div className="bg-white shadow-lg rounded-xl p-6">
-          <h2 className="text-lg font-semibold">Weight</h2>
-          <p className="text-3xl font-bold mt-3">{user?.weight || "N/A"} kg</p>
-        </div>
+            <Link
+              to="/workout"
+              className="flex items-center justify-center gap-2 bg-zinc-800 hover:bg-zinc-700 py-4 rounded-xl transition"
+            >
+              <Dumbbell size={18} />
+              Workout Plan
+            </Link>
 
-        <div className="bg-white shadow-lg rounded-xl p-6">
-          <h2 className="text-lg font-semibold">Height</h2>
-          <p className="text-3xl font-bold mt-3">{user?.height || "N/A"} cm</p>
-        </div>
-      </div>
+            <Link
+              to="/diet"
+              className="flex items-center justify-center gap-2 bg-zinc-800 hover:bg-zinc-700 py-4 rounded-xl transition"
+            >
+              <Utensils size={18} />
+              Diet Planner
+            </Link>
 
-      <div className="grid md:grid-cols-2 gap-6 mt-8">
-        <div className="bg-white shadow-lg rounded-xl p-6">
-          <h2 className="text-xl font-semibold mb-4">BMI Analysis</h2>
-          <p className="text-4xl font-bold">{bmi}</p>
-          <p className="text-gray-600 mt-2">{bmiStatus}</p>
-        </div>
-
-        <div className="bg-white shadow-lg rounded-xl p-6">
-          <h2 className="text-xl font-semibold mb-4">Fitness Summary</h2>
-          <p>Goal: {user?.goal || "Not Set"}</p>
-          <p>Level: {user?.fitnessLevel || "Not Set"}</p>
-          <p>Calories Logged: {totalCalories}</p>
-        </div>
-      </div>
-
-      <div className="bg-white shadow-lg rounded-xl p-6 mt-8">
-        <h2 className="text-2xl font-bold mb-6">Quick Actions</h2>
-
-        <div className="flex flex-wrap gap-4">
-          <Link
-            to="/calories"
-            className="bg-blue-500 hover:bg-blue-600 transition text-white px-5 py-3 rounded-lg font-medium"
-          >
-            Calories Tracker
-          </Link>
-
-          <Link
-            to="/workout"
-            className="bg-green-500 hover:bg-green-600 transition text-white px-5 py-3 rounded-lg font-medium"
-          >
-            Workout Plan
-          </Link>
-
-          <Link
-            to="/diet"
-            className="bg-purple-500 hover:bg-purple-600 transition text-white px-5 py-3 rounded-lg font-medium"
-          >
-            Diet Planner
-          </Link>
-
-          <Link
-            to="/progress"
-            className="bg-orange-500 hover:bg-orange-600 transition text-white px-5 py-3 rounded-lg font-medium"
-          >
-            Progress Tracker
-          </Link>
+            <Link
+              to="/progress"
+              className="flex items-center justify-center gap-2 bg-zinc-800 hover:bg-zinc-700 py-4 rounded-xl transition"
+            >
+              <TrendingUp size={18} />
+              Progress Tracker
+            </Link>
+          </div>
         </div>
       </div>
     </div>
@@ -138,4 +252,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-

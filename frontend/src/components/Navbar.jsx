@@ -20,7 +20,6 @@ const Navbar = () => {
     }
 
     return [
-      { label: "Home", to: "/" },
       { label: "Dashboard", to: "/dashboard" },
       { label: "Calories", to: "/calories" },
       { label: "Workout", to: "/workout" },
@@ -34,61 +33,111 @@ const Navbar = () => {
     <Link
       to={to}
       onClick={() => setOpen(false)}
-      className="text-white/90 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition"
+      className="
+        text-zinc-300
+        hover:text-lime-400
+        px-3
+        py-2
+        rounded-lg
+        text-sm
+        font-medium
+        transition-all
+        duration-300
+        hover:bg-zinc-800
+      "
     >
       {label}
     </Link>
   );
 
   return (
-    <nav className="bg-black text-white border-b border-white/10">
-      <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-        <Link to="/" className="text-xl sm:text-2xl font-bold tracking-tight">
+    <nav className="sticky top-0 z-50 bg-black/95 backdrop-blur-md border-b border-zinc-800">
+      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        {/* Logo */}
+        <Link
+          to="/"
+          className="
+            text-3xl
+            font-extrabold
+            tracking-wide
+            text-lime-400
+            hover:text-lime-300
+            transition
+          "
+        >
           FitForge
         </Link>
 
+        {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-2">
-          {navItems
-            .filter((x) => x.to !== "/")
-            .map((item) => (
-              <NavLink key={item.to} to={item.to} label={item.label} />
-            ))}
+          {navItems.map((item) => (
+            <NavLink key={item.to} to={item.to} label={item.label} />
+          ))}
 
           {token && (
             <button
               onClick={logout}
-              className="bg-red-500 hover:bg-red-600 transition text-white px-3 py-2 rounded-md text-sm font-medium"
+              className="
+                ml-3
+                bg-lime-400
+                hover:bg-lime-300
+                text-black
+                font-bold
+                px-4
+                py-2
+                rounded-lg
+                transition-all
+                duration-300
+              "
             >
               Logout
             </button>
           )}
         </div>
-
         <button
-          type="button"
-          aria-label="Toggle navigation"
-          onClick={() => setOpen((v) => !v)}
-          className="md:hidden inline-flex items-center justify-center rounded-md p-2 hover:bg-white/10 transition"
+          onClick={() => setOpen(!open)}
+          className="
+            md:hidden
+            text-lime-400
+            hover:bg-zinc-800
+            p-2
+            rounded-lg
+          "
         >
-          <svg
-            className="w-6 h-6"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <line x1="3" y1="12" x2="21" y2="12" />
-            <line x1="3" y1="6" x2="21" y2="6" />
-            <line x1="3" y1="18" x2="21" y2="18" />
-          </svg>
+          {open ? (
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              strokeWidth="2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          ) : (
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              strokeWidth="2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          )}
         </button>
       </div>
-
       {open && (
-        <div className="md:hidden border-t border-white/10 px-4 py-3">
-          <div className="flex flex-col gap-1">
+        <div className="md:hidden bg-zinc-900 border-t border-zinc-800">
+          <div className="flex flex-col p-4 gap-2">
             {navItems.map((item) => (
               <NavLink key={item.to} to={item.to} label={item.label} />
             ))}
@@ -99,7 +148,16 @@ const Navbar = () => {
                   setOpen(false);
                   logout();
                 }}
-                className="mt-2 bg-red-500 hover:bg-red-600 transition text-white px-3 py-2 rounded-md text-sm font-medium"
+                className="
+                  mt-2
+                  bg-lime-400
+                  hover:bg-lime-300
+                  text-black
+                  font-bold
+                  py-2
+                  rounded-lg
+                  transition
+                "
               >
                 Logout
               </button>
@@ -112,4 +170,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

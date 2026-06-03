@@ -1,154 +1,250 @@
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import API from "../services/api";
 import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-  ResponsiveContainer,
-} from "recharts";
+  TrendingUp,
+  TrendingDown,
+  Scale,
+  Activity,
+  FileText,
+  Trash2,
+  Plus,
+  BarChart3,
+  Weight,
+  HeartPulse,
+  Flame,
+  Calendar,
+} from "lucide-react";
 
 const Progress = () => {
   const [weight, setWeight] = useState("");
+  const [bodyFat, setBodyFat] = useState("");
+  const [muscleMass, setMuscleMass] = useState("");
+  const [notes, setNotes] = useState("");
 
-  const [progressData, setProgressData] = useState([
-    {
-      day: "Mon",
-      weight: 72,
-    },
+  const [progress, setProgress] = useState([]);
+  const [analytics, setAnalytics] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-    {
-      day: "Tue",
-      weight: 71.5,
-    },
-
-    {
-      day: "Wed",
-      weight: 71,
-    },
-  ]);
-
-  // ADD PROGRESS
-
-  const addProgress = () => {
-    if (!weight) {
-      return;
+  const fetchProgress = async () => {
+    try {
+      const res = await API.get("/progress");
+      setProgress(res.data.progress || []);
+    } catch (error) {
+      console.log(error);
     }
-
-    const newEntry = {
-      day: `Day ${progressData.length + 1}`,
-
-      weight: Number(weight),
-    };
-
-    setProgressData([...progressData, newEntry]);
-
-    setWeight("");
   };
 
-  // CURRENT WEIGHT
+  const fetchAnalytics = async () => {
+    try {
+      const res = await API.get("/progress/analytics");
+      setAnalytics(res.data);
+    } catch (error) {
+      setAnalytics(null);
+    }
+  };
 
-  const latestWeight = progressData[progressData.length - 1]?.weight;
+  useEffect(() => {
+    fetchProgress();
+    fetchAnalytics();
+  }, []);
 
-  // START WEIGHT
+  const addProgress = async () => {
+    if (!weight) return alert("Enter weight");
 
-  const startWeight = progressData[0]?.weight;
+    try {
+      setLoading(true);
 
-  // DIFFERENCE
+      await API.post("/progress", {
+        weight,
+        bodyFat,
+        muscleMass,
+        notes,
+      });
 
-  const progressDifference = latestWeight - startWeight;
+      setWeight("");
+      setBodyFat("");
+      setMuscleMass("");
+      setNotes("");
+
+      fetchProgress();
+      fetchAnalytics();
+    } catch (error) {
+      console.log(error);
+      alert("Failed to add progress");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteProgress = async (id) => {
+    try {
+      await API.delete(`/progress/${id}`);
+      setProgress((prev) => prev.filter((p) => p._id !== id));
+      fetchAnalytics();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-10">
+    <div
+      className="min-h-screen relative"
+      style={{
+        backgroundImage:
+          "url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1800&q=80')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+      }}
+    >
+      <div className="absolute inset-0 bg-black/85" />
 
-      {/* STATS */}
+      <div className="relative z-10 p-6 md:p-10 text-white">
+        <div className="max-w-7xl mx-auto">
+          {/* HEADER */}
+          <div className="mb-10 rounded-3xl border border-lime-500/20 bg-gradient-to-r from-lime-500/20 via-black/40 to-transparent backdrop-blur-xl p-10">
+            <h1 className="text-5xl font-black text-lime-400">
+              Progress Tracker
+            </h1>
+            <p className="text-zinc-300 mt-3">
+              Track your transformation with real data insights
+            </p>
+          </div>
 
-      <div className="grid md:grid-cols-3 gap-6 mb-10">
-        <div className="bg-white shadow-lg rounded-2xl p-6">
-          <h2 className="text-xl font-semibold">Starting Weight</h2>
+          {/* ANALYTICS */}
+          {analytics && (
+            <div className="grid md:grid-cols-4 gap-6 mb-10">
+              <div className="bg-zinc-900/80 border border-zinc-800 rounded-2xl p-6 backdrop-blur-xl">
+                <Scale className="text-lime-400 mb-3" />
+                <p className="text-zinc-400">Start Weight</p>
+                <h2 className="text-3xl font-bold">
+                  {analytics.startingWeight} kg
+                </h2>
+              </div>
 
-          <p className="text-3xl font-bold mt-3">{startWeight} kg</p>
-        </div>
+              <div className="bg-zinc-900/80 border border-zinc-800 rounded-2xl p-6 backdrop-blur-xl">
+                <Activity className="text-lime-400 mb-3" />
+                <p className="text-zinc-400">Current Weight</p>
+                <h2 className="text-3xl font-bold">
+                  {analytics.currentWeight} kg
+                </h2>
+              </div>
 
-        <div className="bg-white shadow-lg rounded-2xl p-6">
-          <h2 className="text-xl font-semibold">Current Weight</h2>
+              <div className="bg-zinc-900/80 border border-zinc-800 rounded-2xl p-6 backdrop-blur-xl">
+                {analytics.weightChange >= 0 ? (
+                  <TrendingUp className="text-red-400 mb-3" />
+                ) : (
+                  <TrendingDown className="text-lime-400 mb-3" />
+                )}
 
-          <p className="text-3xl font-bold mt-3">{latestWeight} kg</p>
-        </div>
+                <p className="text-zinc-400">Weight Change</p>
+                <h2 className="text-3xl font-bold">
+                  {analytics.weightChange.toFixed(1)} kg
+                </h2>
+              </div>
 
-        <div className="bg-white shadow-lg rounded-2xl p-6">
-          <h2 className="text-xl font-semibold">Progress</h2>
-
-          <p className="text-3xl font-bold mt-3">
-            {progressDifference > 0
-              ? `+${progressDifference}`
-              : progressDifference}{" "}
-            kg
-          </p>
-        </div>
-      </div>
-
-      {/* INPUT */}
-
-      <div className="bg-white shadow-lg rounded-2xl p-8 mb-10">
-        <h2 className="text-2xl font-bold mb-5">Add Weight Entry</h2>
-
-        <div className="flex gap-4">
-          <input
-            type="number"
-            placeholder="Enter weight"
-            value={weight}
-            onChange={(e) => setWeight(e.target.value)}
-            className="border p-3 rounded-lg w-64"
-          />
-
-          <button
-            onClick={addProgress}
-            className="bg-black text-white px-6 rounded-lg"
-          >
-            Add
-          </button>
-        </div>
-      </div>
-
-      {/* CHART */}
-
-      <div className="bg-white shadow-lg rounded-2xl p-8">
-        <h2 className="text-3xl font-bold mb-8">Weight Progress Chart</h2>
-
-        <ResponsiveContainer width="100%" height={400}>
-          <LineChart data={progressData}>
-            <CartesianGrid strokeDasharray="3 3" />
-
-            <XAxis dataKey="day" />
-
-            <YAxis />
-
-            <Tooltip />
-
-            <Line type="monotone" dataKey="weight" strokeWidth={3} />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-
-      {/* HISTORY */}
-
-      <div className="bg-white shadow-lg rounded-2xl p-8 mt-10">
-        <h2 className="text-3xl font-bold mb-6">Progress History</h2>
-
-        <div className="space-y-4">
-          {progressData.map((item, index) => (
-            <div
-              key={index}
-              className="border rounded-lg p-4 flex justify-between"
-            >
-              <span>{item.day}</span>
-
-              <span>{item.weight} kg</span>
+              <div className="bg-zinc-900/80 border border-zinc-800 rounded-2xl p-6 backdrop-blur-xl">
+                <BarChart3 className="text-lime-400 mb-3" />
+                <p className="text-zinc-400">Total Entries</p>
+                <h2 className="text-3xl font-bold">{analytics.totalEntries}</h2>
+              </div>
             </div>
-          ))}
+          )}
+
+          {/* ADD PROGRESS */}
+          <div className="bg-zinc-900/80 border border-zinc-800 rounded-3xl p-8 backdrop-blur-xl mb-10">
+            <div className="flex items-center gap-3 mb-6">
+              <Plus className="text-lime-400" />
+              <h2 className="text-2xl font-bold">Add Progress</h2>
+            </div>
+
+            <div className="grid md:grid-cols-4 gap-4">
+              <input
+                type="number"
+                placeholder="Weight (kg)"
+                value={weight}
+                onChange={(e) => setWeight(e.target.value)}
+                className="bg-zinc-800 border border-zinc-700 p-3 rounded-xl"
+              />
+
+              <input
+                type="number"
+                placeholder="Body Fat %"
+                value={bodyFat}
+                onChange={(e) => setBodyFat(e.target.value)}
+                className="bg-zinc-800 border border-zinc-700 p-3 rounded-xl"
+              />
+
+              <input
+                type="number"
+                placeholder="Muscle Mass"
+                value={muscleMass}
+                onChange={(e) => setMuscleMass(e.target.value)}
+                className="bg-zinc-800 border border-zinc-700 p-3 rounded-xl"
+              />
+
+              <button
+                onClick={addProgress}
+                disabled={loading}
+                className="bg-lime-400 text-black font-bold rounded-xl hover:bg-lime-300 transition"
+              >
+                {loading ? "Saving..." : "Add"}
+              </button>
+            </div>
+
+            <textarea
+              placeholder="Notes..."
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              className="w-full mt-4 bg-zinc-800 border border-zinc-700 p-3 rounded-xl"
+            />
+          </div>
+
+          {/* HISTORY */}
+          <div className="bg-zinc-900/80 border border-zinc-800 rounded-3xl p-8 backdrop-blur-xl">
+            <div className="flex items-center gap-3 mb-6">
+              <Calendar className="text-lime-400" />
+              <h2 className="text-2xl font-bold">Progress History</h2>
+            </div>
+
+            {progress.length === 0 ? (
+              <p className="text-zinc-400">No progress data yet.</p>
+            ) : (
+              <div className="grid md:grid-cols-2 gap-6">
+                {progress.map((p) => (
+                  <div
+                    key={p._id}
+                    className="bg-zinc-800/60 border border-zinc-700 rounded-2xl p-6"
+                  >
+                    <div className="flex justify-between">
+                      <h3 className="text-lime-400 font-bold">{p.weight} kg</h3>
+
+                      <button
+                        onClick={() => deleteProgress(p._id)}
+                        className="text-red-400 hover:text-red-300"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
+
+                    <div className="mt-3 text-zinc-300 space-y-1">
+                      <p>Body Fat: {p.bodyFat || "-"}%</p>
+                      <p>Muscle Mass: {p.muscleMass || "-"}</p>
+                      <p className="text-sm text-zinc-500">
+                        {new Date(p.createdAt).toLocaleDateString()}
+                      </p>
+                    </div>
+
+                    {p.notes && (
+                      <div className="mt-3 text-zinc-400 text-sm">
+                        {p.notes}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
