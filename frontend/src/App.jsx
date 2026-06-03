@@ -12,69 +12,75 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import Diet from "./pages/Diet";
 import Progress from "./pages/Progress";
 import Profile from "./pages/Profile";
+
+import ErrorBoundary from "./components/ErrorBoundary";
+
 function App() {
   return (
     <BrowserRouter>
       <Navbar />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
+      <ErrorBoundary>
+        <Routes>
+          <Route path="/" element={<Home />} />
 
-        <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login />} />
 
-        <Route path="/register" element={<Register />} />
+          <Route path="/register" element={<Register />} />
 
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/calories"
-          element={
-            <ProtectedRoute>
-              <Calories />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/workout"
-          element={
-            <ProtectedRoute>
-              <Workout />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/diet"
-          element={
-            <ProtectedRoute>
-              <Diet />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/progress"
-          element={
-            <ProtectedRoute>
-              <Progress />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/calories"
+            element={
+              <ProtectedRoute>
+                <Calories />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/workout"
+            element={
+              <ProtectedRoute>
+                <Workout />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/diet"
+            element={
+              <ProtectedRoute>
+                <Diet />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/progress"
+            element={
+              <ProtectedRoute>
+                <Progress />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </ErrorBoundary>
     </BrowserRouter>
   );
 }
 
 export default App;
+

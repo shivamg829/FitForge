@@ -1,8 +1,9 @@
 import { useState } from "react";
-
 import { useNavigate } from "react-router-dom";
 
 import API from "../services/api";
+import ErrorScreen from "../components/ErrorScreen";
+import { normalizeApiError } from "../utils/apiError";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -13,10 +14,12 @@ const Register = () => {
     password: "",
   });
 
+  const [loading, setLoading] = useState(false);
+  const [errorState, setErrorState] = useState(null);
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
-
       [e.target.name]: e.target.value,
     });
   };
@@ -24,49 +27,180 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setErrorState(null);
+    setLoading(true);
+
     try {
       await API.post("/auth/register", formData);
-
-      alert("Registration successful");
-
       navigate("/login");
     } catch (error) {
-      alert(error.response.data.message);
+      setErrorState(normalizeApiError(error));
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex justify-center mt-20">
-      <div className="w-96 p-6 shadow-lg rounded-xl">
-        <h2 className="text-3xl font-bold mb-6">Register</h2>
+    <div className="min-h-screen bg-black flex items-center justify-center px-4">
+      {errorState && (
+        <ErrorScreen
+          title={errorState.title}
+          message={errorState.message}
+          ctaLabel="Go to Login"
+          onCta={() => navigate("/login")}
+          showMeta={false}
+        />
+      )}
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <input
-            type="text"
-            name="name"
-            placeholder="Name"
-            onChange={handleChange}
-            className="border p-3 rounded"
-          />
+      <div className="w-full max-w-md">
+        {/* Main Card */}
+        <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 shadow-2xl">
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            onChange={handleChange}
-            className="border p-3 rounded"
-          />
+          {/* Logo */}
+          <div className="text-center mb-8">
+            <h1 className="text-5xl font-extrabold tracking-wide text-lime-400">
+              FitForge
+            </h1>
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            onChange={handleChange}
-            className="border p-3 rounded"
-          />
+            <p className="text-zinc-400 mt-3 text-sm">
+              Transform Your Body. Track Every Rep.
+            </p>
+          </div>
 
-          <button className="bg-black text-white p-3 rounded">Register</button>
-        </form>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Name */}
+            <input
+              type="text"
+              name="name"
+              placeholder="Full Name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              className="
+                w-full
+                bg-zinc-800
+                border
+                border-zinc-700
+                text-white
+                px-4
+                py-3
+                rounded-xl
+                focus:outline-none
+                focus:border-lime-400
+                focus:ring-2
+                focus:ring-lime-400/20
+              "
+            />
+
+            {/* Email */}
+            <input
+              type="email"
+              name="email"
+              placeholder="Email Address"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="
+                w-full
+                bg-zinc-800
+                border
+                border-zinc-700
+                text-white
+                px-4
+                py-3
+                rounded-xl
+                focus:outline-none
+                focus:border-lime-400
+                focus:ring-2
+                focus:ring-lime-400/20
+              "
+            />
+
+            {/* Password */}
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              className="
+                w-full
+                bg-zinc-800
+                border
+                border-zinc-700
+                text-white
+                px-4
+                py-3
+                rounded-xl
+                focus:outline-none
+                focus:border-lime-400
+                focus:ring-2
+                focus:ring-lime-400/20
+              "
+            />
+
+            {/* Register Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="
+                w-full
+                bg-lime-400
+                hover:bg-lime-300
+                text-black
+                font-bold
+                py-3
+                rounded-xl
+                transition-all
+                duration-300
+                disabled:opacity-50
+                disabled:cursor-not-allowed
+              "
+            >
+              {loading ? "Creating Account..." : "CREATE ACCOUNT"}
+            </button>
+          </form>
+
+          {/* Divider */}
+          <div className="flex items-center my-6">
+            <div className="flex-1 h-px bg-zinc-700"></div>
+            <span className="px-4 text-zinc-500 text-sm">OR</span>
+            <div className="flex-1 h-px bg-zinc-700"></div>
+          </div>
+
+          {/* Login Button */}
+          <button
+            type="button"
+            onClick={() => navigate("/login")}
+            className="
+              w-full
+              border
+              border-lime-400
+              text-lime-400
+              font-semibold
+              py-3
+              rounded-xl
+              hover:bg-lime-400
+              hover:text-black
+              transition-all
+              duration-300
+            "
+          >
+            LOGIN TO EXISTING ACCOUNT
+          </button>
+        </div>
+
+        {/* Footer */}
+        <div className="text-center mt-6 text-zinc-500 text-sm">
+          Already a member?{" "}
+          <button
+            onClick={() => navigate("/login")}
+            className="text-lime-400 hover:text-lime-300 font-semibold"
+          >
+            Login
+          </button>
+        </div>
       </div>
     </div>
   );
