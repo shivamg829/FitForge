@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
+import IMG from "../IMG/DashWorkProf.avif";
 import {
   Dumbbell,
   Target,
@@ -79,7 +80,7 @@ const Workout = () => {
       className="min-h-screen relative"
       style={{
         backgroundImage:
-          "url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1800&q=80')",
+          `url('${IMG}')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundAttachment: "fixed",

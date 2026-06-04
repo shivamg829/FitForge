@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import API from "../services/api";
+import IMG from  "../IMG/Progress.avif";
 import {
   Flame,
   Utensils,
@@ -125,8 +126,7 @@ const Calories = () => {
     <div
       className="min-h-screen relative"
       style={{
-        backgroundImage:
-          "url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1800&q=80')",
+        backgroundImage: `url(${IMG})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundAttachment: "fixed",

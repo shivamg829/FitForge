@@ -53,10 +53,7 @@ const Register = () => {
       )}
 
       <div className="w-full max-w-md">
-        {/* Main Card */}
         <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 shadow-2xl">
-
-          {/* Logo */}
           <div className="text-center mb-8">
             <h1 className="text-5xl font-extrabold tracking-wide text-lime-400">
               FitForge
@@ -68,7 +65,6 @@ const Register = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Name */}
             <input
               type="text"
               name="name"
@@ -91,8 +87,6 @@ const Register = () => {
                 focus:ring-lime-400/20
               "
             />
-
-            {/* Email */}
             <input
               type="email"
               name="email"
@@ -115,8 +109,6 @@ const Register = () => {
                 focus:ring-lime-400/20
               "
             />
-
-            {/* Password */}
             <input
               type="password"
               name="password"
@@ -139,8 +131,6 @@ const Register = () => {
                 focus:ring-lime-400/20
               "
             />
-
-            {/* Register Button */}
             <button
               type="submit"
               disabled={loading}
@@ -169,7 +159,6 @@ const Register = () => {
             <div className="flex-1 h-px bg-zinc-700"></div>
           </div>
 
-          {/* Login Button */}
           <button
             type="button"
             onClick={() => navigate("/login")}
@@ -190,8 +179,6 @@ const Register = () => {
             LOGIN TO EXISTING ACCOUNT
           </button>
         </div>
-
-        {/* Footer */}
         <div className="text-center mt-6 text-zinc-500 text-sm">
           Already a member?{" "}
           <button

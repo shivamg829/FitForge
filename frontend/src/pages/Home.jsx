@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import  IMG from "../IMG/Progress.avif";
 import {
   Dumbbell,
   Flame,
@@ -43,7 +44,7 @@ const Home = () => {
         className="relative min-h-screen flex items-center"
         style={{
           backgroundImage:
-            "url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=2000&q=80')",
+            `url(${IMG})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}

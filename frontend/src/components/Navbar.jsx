@@ -1,14 +1,36 @@
 import { Link } from "react-router-dom";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+
+import API from "../services/api";
 
 const Navbar = () => {
   const token = localStorage.getItem("token");
   const [open, setOpen] = useState(false);
+  const [role, setRole] = useState(null);
 
   const logout = () => {
     localStorage.removeItem("token");
     window.location.reload();
   };
+
+  useEffect(() => {
+    const loadRole = async () => {
+      try {
+        if (!token) {
+          setRole(null);
+          return;
+        }
+
+        // Backend protects this route with auth middleware and returns profile user (without password)
+        const res = await API.get("/auth/profile");
+        setRole(res?.data?.role || null);
+      } catch {
+        setRole(null);
+      }
+    };
+
+    loadRole();
+  }, [token]);
 
   const navItems = useMemo(() => {
     if (!token) {
@@ -19,15 +41,18 @@ const Navbar = () => {
       ];
     }
 
-    return [
+    const items = [
       { label: "Dashboard", to: "/dashboard" },
+      ...(role === "admin" ? [{ label: "Admin", to: "/admin" }] : []),
       { label: "Calories", to: "/calories" },
       { label: "Workout", to: "/workout" },
       { label: "Progress", to: "/progress" },
       { label: "Diet", to: "/diet" },
       { label: "Profile", to: "/profile" },
     ];
-  }, [token]);
+
+    return items;
+  }, [token, role]);
 
   const NavLink = ({ to, label }) => (
     <Link
@@ -68,7 +93,6 @@ const Navbar = () => {
           FitForge
         </Link>
 
-        {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-2">
           {navItems.map((item) => (
             <NavLink key={item.to} to={item.to} label={item.label} />
@@ -170,3 +194,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

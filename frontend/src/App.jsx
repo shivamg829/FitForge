@@ -12,6 +12,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import Diet from "./pages/Diet";
 import Progress from "./pages/Progress";
 import Profile from "./pages/Profile";
+import Admin from "./pages/Admin";
 
 import ErrorBoundary from "./components/ErrorBoundary";
 
@@ -23,6 +24,7 @@ function App() {
       <ErrorBoundary>
         <Routes>
           <Route path="/" element={<Home />} />
+
 
           <Route path="/login" element={<Login />} />
 
@@ -36,6 +38,16 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <Admin />
+              </ProtectedRoute>
+            }
+          />
+
           <Route
             path="/calories"
             element={
@@ -52,6 +64,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/diet"
             element={

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import API from "../services/api";
+import IMG from "../IMG/DashWorkProf.avif";
 import {
   Flame,
   Utensils,
@@ -84,7 +85,7 @@ const Dashboard = () => {
       className="min-h-screen relative"
       style={{
         backgroundImage:
-          "url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1600&q=80')",
+          `url('${IMG}')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundAttachment: "fixed",
