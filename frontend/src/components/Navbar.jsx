@@ -2,8 +2,10 @@ import { Link } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 
 import API from "../services/api";
+import { useContext } from "react";
 
 const Navbar = () => {
+
   const token = localStorage.getItem("token");
   const [open, setOpen] = useState(false);
   const [role, setRole] = useState(null);
@@ -97,6 +99,8 @@ const Navbar = () => {
           {navItems.map((item) => (
             <NavLink key={item.to} to={item.to} label={item.label} />
           ))}
+
+
 
           {token && (
             <button
