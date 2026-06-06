@@ -6,7 +6,7 @@ const path = require("path");
 
 const authRoutes = require("./routes/authRoutes");
 const calorieRoutes = require('./routes/calorieRoutes.js');
-const workoutRoutes = require("./routes/workoutRoutes");
+const workoutRoutes = require("./routes/workoutRoutes.js");
 const dietRoutes = require("./routes/dietRoutes");
 const progressRoutes = require("./routes/progressRoutes");
 const adminRoutes = require("./routes/adminRoutes");
@@ -52,12 +52,12 @@ if (process.env.NODE_ENV === 'production') {
   const frontendPath = path.join(__dirname, '../frontend/dist');
   app.use(express.static(frontendPath));
   
-  app.get('*', (req, res) => {
+  app.get('/', (req, res) => {
     res.sendFile(path.join(frontendPath, 'index.html'));
   });
 }
 
-app.use('/api/*', (req, res) => {
+app.use('/api', (req, res) => {
   res.status(404).json({ error: 'API endpoint not found' });
 });
 
