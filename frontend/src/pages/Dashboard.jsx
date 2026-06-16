@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import API from "../services/api";
 import IMG from "../IMG/DashWorkProf.avif";
+import { getImageUrl } from "../utils/imageUrl";
 import {
   Flame,
   Utensils,
@@ -109,7 +110,7 @@ const Dashboard = () => {
             <div className="flex flex-col md:flex-row items-center gap-8">
               {user.profileImage ? (
                 <img
-                  src={`http://localhost:8000${user.profileImage}`}
+                  src={getImageUrl(user.profileImage)}
                   alt="Profile"
                   className="w-32 h-32 rounded-full object-cover border-4 border-lime-400"
                 />

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
 import IMG from "../IMG/DashWorkProf.avif"
+import { getImageUrl } from "../utils/imageUrl";
+
 import {
   User,
   Upload,
@@ -139,7 +141,7 @@ const Profile = () => {
                   <div className="flex flex-col items-center">
                     {user.profileImage ? (
                       <img
-                        src={`http://localhost:8000${user.profileImage}`}
+                        src={getImageUrl(user.profileImage)}
                         alt="profile"
                         className="w-40 h-40 rounded-full object-cover border-4 border-lime-400"
                       />
