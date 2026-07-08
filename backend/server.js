@@ -36,12 +36,12 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-app.use("/auth", authRoutes);
-app.use("/calories", calorieRoutes);
-app.use("/workout", workoutRoutes);
-app.use("/diet", dietRoutes);
-app.use("/progress", progressRoutes);
-app.use("/admin", adminRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/calories", calorieRoutes);
+app.use("/api/workout", workoutRoutes);
+app.use("/api/diet", dietRoutes);
+app.use("/api/progress", progressRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.get("/", (req, res) => {
   res.send("Welcome to FitForge API");
