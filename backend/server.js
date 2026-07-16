@@ -14,7 +14,7 @@ const adminRoutes = require("./routes/adminRoutes");
 const app = express();
 
 const allowedOrigins = [
-  process.env.FRONTEND_URL
+  process.env.FRONTEND_URL  
 ].filter(Boolean);
 
 app.use(cors({
