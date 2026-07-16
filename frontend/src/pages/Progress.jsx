@@ -102,7 +102,7 @@ const Progress = () => {
       <div className="relative z-10 p-6 md:p-10 text-white">
         <div className="max-w-7xl mx-auto">
           {/* HEADER */}
-          <div className="mb-10 rounded-3xl border border-lime-500/20 bg-linear-to-r from-lime-500/20 via-black/40 to-transparent backdrop-blur-xl p-10">
+          <div className="mb-10 rounded-3xl border border-lime-500/20 bg-gradient-to-r from-lime-500/20 via-black/40 to-transparent backdrop-blur-xl p-10">
             <h1 className="text-5xl font-black text-lime-400">
               Progress Tracker
             </h1>

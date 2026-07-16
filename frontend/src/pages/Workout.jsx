@@ -90,7 +90,7 @@ const Workout = () => {
 
       <div className="relative z-10 p-6 md:p-10 text-white">
         <div className="max-w-7xl mx-auto">
-          <div className="rounded-3xl overflow-hidden border border-lime-500/20 backdrop-blur-xl bg-linear-to-r from-lime-500/20 via-black/40 to-transparent p-10 mb-10">
+          <div className="rounded-3xl overflow-hidden border border-lime-500/20 backdrop-blur-xl bg-gradient-to-r from-lime-500/20 via-black/40 to-transparent p-10 mb-10">
             <div className="max-w-3xl">
               <div className="flex items-center gap-3 mb-4">
                 <Dumbbell size={42} className="text-lime-400" />

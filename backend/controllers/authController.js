@@ -137,11 +137,11 @@ const updateProfile = async (req, res) => {
       });
     }
 
-    user.name = req.body.name || user.name;
-    user.weight = req.body.weight || user.weight;
-    user.height = req.body.height || user.height;
-    user.goal = req.body.goal || user.goal;
-    user.fitnessLevel = req.body.fitnessLevel || user.fitnessLevel;
+    user.name = req.body.name ?? user.name;
+    user.weight = req.body.weight !== undefined ? req.body.weight : user.weight;
+    user.height = req.body.height !== undefined ? req.body.height : user.height;
+    user.goal = req.body.goal ?? user.goal;
+    user.fitnessLevel = req.body.fitnessLevel ?? user.fitnessLevel;
 
     await user.save();
 

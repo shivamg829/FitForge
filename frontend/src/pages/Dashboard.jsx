@@ -41,20 +41,22 @@ const Dashboard = () => {
       ? (user.weight / Math.pow(user.height / 100, 2)).toFixed(1)
       : "N/A";
 
+  const bmiNum = bmi !== "N/A" ? Number(bmi) : null;
+
   let bmiStatus = "Not Available";
 
-  if (bmi !== "N/A") {
-    if (bmi < 18.5) bmiStatus = "Underweight";
-    else if (bmi < 25) bmiStatus = "Healthy";
-    else if (bmi < 30) bmiStatus = "Overweight";
+  if (bmiNum !== null) {
+    if (bmiNum < 18.5) bmiStatus = "Underweight";
+    else if (bmiNum < 25) bmiStatus = "Healthy";
+    else if (bmiNum < 30) bmiStatus = "Overweight";
     else bmiStatus = "Obese";
   }
 
   const getBmiColor = () => {
-    if (bmi === "N/A") return "bg-zinc-700";
-    if (bmi < 18.5) return "bg-yellow-500";
-    if (bmi < 25) return "bg-lime-500";
-    if (bmi < 30) return "bg-orange-500";
+    if (bmiNum === null) return "bg-zinc-700";
+    if (bmiNum < 18.5) return "bg-yellow-500";
+    if (bmiNum < 25) return "bg-lime-500";
+    if (bmiNum < 30) return "bg-orange-500";
     return "bg-red-500";
   };
 

@@ -97,7 +97,8 @@ const Profile = () => {
 
   if (bmi > 0 && bmi < 18.5) bmiStatus = "Underweight";
   else if (bmi >= 18.5 && bmi < 25) bmiStatus = "Healthy";
-  else if (bmi >= 25) bmiStatus = "Overweight";
+  else if (bmi >= 25 && bmi < 30) bmiStatus = "Overweight";
+  else if (bmi >= 30) bmiStatus = "Obese";
 
   let completedFields = 0;
 
@@ -124,7 +125,7 @@ const Profile = () => {
 
       <div className="relative z-10 p-6 md:p-10 text-white">
         <div className="max-w-7xl mx-auto">
-          <div className="rounded-3xl border border-lime-500/20 bg-linear-to-r from-lime-500/20 to-transparent backdrop-blur-md p-10 mb-8">
+          <div className="rounded-3xl border border-lime-500/20 bg-gradient-to-r from-lime-500/20 to-transparent backdrop-blur-md p-10 mb-8">
             <h1 className="text-5xl font-extrabold text-lime-400">
               My Profile
             </h1>

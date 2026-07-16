@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 
 import API from "../services/api";
-import { useContext } from "react";
 
 const Navbar = () => {
 
@@ -22,8 +21,6 @@ const Navbar = () => {
           setRole(null);
           return;
         }
-
-        // Backend protects this route with auth middleware and returns profile user (without password)
         const res = await API.get("/auth/profile");
         setRole(res?.data?.role || null);
       } catch {

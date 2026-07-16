@@ -34,7 +34,7 @@ const fileFilter = (req, file, cb) => {
 
     } else {
 
-        cb("Only images are allowed");
+        cb(new Error("Only images are allowed"));
     }
 };
 
